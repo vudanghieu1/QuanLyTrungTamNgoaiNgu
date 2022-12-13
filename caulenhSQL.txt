@@ -1,0 +1,291 @@
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spSuaHocVien]
+	-- Add the parameters for the stored procedure here
+	@maHocVien int,
+	@ho nvarchar(15) ,
+	@ten nvarchar(15),
+	@ngaySinh date,
+	@gioiTinh nvarchar(6),
+	@diaChi nvarchar(100) ,
+	@dienThoai varchar(10) ,
+	@email varchar(50),
+	@ngayNhapHoc date,
+	@maLop varchar(15)
+	
+AS
+BEGIN
+	
+	update HocVien set Ho=@ho,Ten=@ten,NgaySinh=@ngaySinh,GioiTinh= @gioiTinh,DiaChi=@diaChi,DienThoai= @dienThoai,Email= @email,NgayNhapHoc=@ngayNhapHoc,MaLop = @maLop where MaHocVien = @maHocVien
+	
+END
+GO
+/////////////////////////////////////////////////////////////////////////////////////////
+USE [QuanLyTrungTamNgoaiNgu1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spSuaHoSo]    
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spSuaHoSo]   
+	-- Add the parameters for the stored procedure here
+	@maHoSo int,
+	@ho nvarchar(15) ,
+	@ten nvarchar(15),
+	@ngaySinh date,
+	@gioiTinh nvarchar(6),
+	@diaChi nvarchar(100) ,
+	@dienThoai varchar(10) ,
+	@email varchar(50) 
+AS
+BEGIN
+	Declare @dem int;
+	set @dem = (select count(*) from HoSo where DienThoai=@dienThoai);
+	if @dem >0
+		throw 50000, N'Trung dien thoai',1;
+	else begin
+		set @dem = (select count(*) from HoSo where Email=@email);
+		if @dem >0
+			throw 50001, N'Trung email',1;
+		else
+			update HoSo set Ho=@ho,Ten=@ten,NgaySinh=@ngaySinh,GioiTinh= @gioiTinh,DiaChi=@diaChi,DienThoai= @dienThoai,Email= @email where MaHoSo = @maHoSo
+	end
+END
+GO
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+USE [QuanLyTrungTamNgoaiNgu1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spThemHocVien]    
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spThemHocVien]   
+	-- Add the parameters for the stored procedure here
+	@ho nvarchar(15) ,
+	@ten nvarchar(15),
+	@ngaySinh date,
+	@gioiTinh nvarchar(6),
+	@diaChi nvarchar(100) ,
+	@dienThoai varchar(10) ,
+	@email varchar(50),
+	@ngayNhapHoc date,
+	@maLop varchar(15)
+AS
+BEGIN
+	Declare @dem int;
+	set @dem = (select count(*) from HocVien where DienThoai = @dienThoai);
+	if @dem>0
+		throw 50000,N'Da co so dien thoai nay',1;
+	else begin
+		set @dem = (select count(*) from HocVien where Email = @email);
+		if @dem>0
+			throw 50000,N'Da co email nay',1;
+		else
+			insert HocVien values (@ho,@ten,@ngaySinh,@gioiTinh,@diaChi,@dienThoai,@email,@ngayNhapHoc,@maLop)
+	end
+
+end
+GO
+////////////////////////////////////////////////////////////////////////////////////////////////
+USE [QuanLyTrungTamNgoaiNgu1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spThemHoSo]    
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spThemHoSo]  
+	-- Add the parameters for the stored procedure here
+	@ho nvarchar(15) ,
+	@ten nvarchar(15),
+	@ngaySinh date,
+	@gioiTinh nvarchar(6),
+	@diaChi nvarchar(100) ,
+	@dienThoai varchar(10) ,
+	@email varchar(50) 
+AS
+BEGIN
+	Declare @dem int;
+	set @dem = (select count(*) from HoSo where DienThoai=@dienThoai);
+	if @dem >0
+		throw 50000, N'Trung dien thoai',1;
+	else begin
+		set @dem = (select count(*) from HoSo where Email=@email);
+		if @dem >0
+			throw 50001, N'Trung email',1;
+		else
+			insert HoSo values (@ho,@ten,@ngaySinh,@gioiTinh,@diaChi,@dienThoai,@email)
+	end
+END
+GO
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+USE [QuanLyTrungTamNgoaiNgu1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spXoaHocVien]    
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spXoaHocVien]
+	-- Add the parameters for the stored procedure here
+	@maHocVien int
+AS
+BEGIN
+	declare @dem int;
+	set @dem = (select count(*) from Dangky where MaHocVien=@maHocVien);
+	if @dem>0
+		throw 50000,N'Co dang ky lien quan den hoc vien',1;
+	else
+		Delete HocVien where MaHocVien=@maHocVien
+END
+GO
+/////////////////////////////////////////////////////////////////////
+USE [QuanLyTrungTamNgoaiNgu1]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spXoaHoSo]    
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[spXoaHoSo]
+	-- Add the parameters for the stored procedure here
+	@maHoSo int
+AS
+BEGIN
+	
+	Delete HoSo where MaHoSo=@maHoSo
+END
+GO
+///////////////////////////////////////////////////////////////////////////////////
+USE QuanLyTrungTamNgoaiNgu1
+CREATE TABLE NgoaiNgu(
+	MaNgoaiNgu VARCHAR(3) PRIMARY KEY ,
+	TenNgoaiNgu NVARCHAR(30) NOT NULL UNIQUE
+)
+create table GiaoVien
+(
+	MaGiaoVien int identity primary key,
+	Ho nvarchar(15) not null,
+	Ten nvarchar(15) not null,
+	NgaySinh date not null,
+	GioiTinh bit,
+	DiaChi nvarchar(100) not null,
+	DienThoai varchar(10) not null unique,
+	Email varchar(50) not null unique,
+)
+create table BangCap
+(
+	MaBangCap varchar(3) primary key,
+	TenBangCap nvarchar(30) not null unique,
+)
+create table TrinhDoGiaoVien
+(
+	MaGiaoVien int not null references GiaoVien(MaGiaoVien),
+	MaNgoaiNgu varchar(3) not null references NgoaiNgu(MaNgoaiNgu),
+	MaBangCap varchar(3) not null references BangCap(MaBangCap),
+	GhiChu nvarchar(30),
+	primary key(MaGiaoVien,MaNgoaiNgu,MaBangCap)
+)
+create table Lop
+(
+	MaLop varchar(15) primary key,
+	TenLop nvarchar(30) not null unique,
+	MaGiaoVien int not null references GiaoVien(MaGiaoVien),
+	NgayBatDau date not null,
+	NgayKetThuc date,
+	MaNgoaiNgu varchar(3) not null references NgoaiNgu(MaNgoaiNgu),
+	DiaDiem nvarchar(50) not null,
+	ThoiGian nvarchar(50) not null,
+	GhiChu nvarchar(100),
+)
+create table HoSo
+(
+	MaHoSo int identity primary key,
+	Ho nvarchar(15) not null,
+	Ten nvarchar(15) not null,
+	NgaySinh date not null,
+	GioiTinh bit,
+	DiaChi nvarchar(100) not null,
+	DienThoai varchar(10) not null unique,
+	Email varchar(50) not null unique,	
+)
+create table HocVien
+(
+	MaHocVien int identity primary key,
+	Ho nvarchar(15) not null,
+	Ten nvarchar(15) not null,
+	NgaySinh date not null,
+	GioiTinh bit,
+	DiaChi nvarchar(100) not null,
+	DienThoai varchar(10) not null unique,
+	Email varchar(50) not null unique,
+	NgayNhapHoc date not null,
+	MaLop varchar(15) not null references Lop(MaLop)
+)
+create table DangKy
+(
+	MaHocVien int not null references HocVien(MaHocVien),
+	MaLop varchar(15) not null references Lop(MaLop),
+	Diem float,
+	primary key(MaHocVien,MaLop)
+)
